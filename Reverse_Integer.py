@@ -16,9 +16,23 @@ Assume we are dealing with an environment which could only store integers within
 overflows.
 """
 
-my_num = int(input("Please enter a whole number from the range between - 2147483648, 2147483648 : "))
-print(type(my_num))
+my_list = list(input("Please enter a whole number from the range between - 2147483648, 2147483648 : "))
 
 
-def reverse_digits(user_num):
-    pass
+def reverse_digits(user_list):
+    if user_list[0] == "-":
+        sign = [user_list[0]]
+        chars = user_list[1:][::-1]
+        reversed_list = sign + chars
+    else:
+        reversed_list = user_list[::-1]
+    reversed_num = "".join(reversed_list)
+    return int(reversed_num)
+
+
+print(reverse_digits(my_list))
+
+
+
+
+
