@@ -1,5 +1,5 @@
 # coding=utf-8
-# Status - In Progress
+# Status - Done
 
 """
 Given a 32-bit signed integer, reverse digits of an integer.
