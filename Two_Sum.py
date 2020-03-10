@@ -13,7 +13,7 @@ Because nums[0] + nums[1] = 2 + 7 = 9,
 return [0, 1].
 """
 
-my_list = list(input("Please enter numbers in the following format: 1, 2, 7, 3 :"))
+my_list = list(map(int, input("Please enter numbers in the following format: 1 29 7 3 ").split()))
 my_num = int(input("Please enter a whole number: "))
 
 
