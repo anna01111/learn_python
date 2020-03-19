@@ -1,4 +1,3 @@
-# Status - In Progress
 
 """
 Roman numerals are represented by seven different symbols: I, V, X, L, C, D and M.
@@ -69,7 +68,7 @@ roman_numerals_composite = {
     "CM": 900,
 }
 
-my_roman_num = input("Please enter a roman number in the range from 1 to 3999: ")
+my_roman_num = input("Please enter a valid roman number in the range from 1 to 3999: ")
 my_arabic_num = 0
 
 for key in roman_numerals_composite:
