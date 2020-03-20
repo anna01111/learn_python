@@ -28,7 +28,7 @@ def place_sign(board, signs):
         place_sign(board, signs)
 
 
-def check_winner(board):
+def winner_check(board):
     """
     :param board:
     :return: False if there is no winner, winner if there is a winner
@@ -46,7 +46,7 @@ def check_winner(board):
     return winner
 
 
-def check_for_a_draw(board):
+def draw_check(board):
     """
     :param board:
     :return: True if there is a draw ans False if not
@@ -63,11 +63,12 @@ my_signs = ['x', '0']
 my_board = create_board()
 print('Welcome to my game ^ ^')
 while True:
-    if check_winner(my_board):
+    if winner_check(my_board):
         print_board(my_board)
-        print('The winner is ' + check_winner(my_board))
+        print('The winner is ' + winner_check(my_board))
         break
-    elif check_for_a_draw(my_board):
+    elif draw_check(my_board):
+        print_board(my_board)
         print('There is a draw')
         break
     place_sign(my_board, my_signs)
