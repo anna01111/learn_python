@@ -18,13 +18,20 @@ def print_board(board):
 
 
 def place_sign(board, signs):
-    print_board(board)
-    row = int(input('Enter a row to place ' + signs[0] + ' (1, 2 or 3): '))
-    col = int(input('Enter a col to place ' + signs[0] + ' (1, 2 or 3): '))
-    if board[row - 1][col - 1] == ' ':
-        board[row - 1][col - 1] = signs[0]
-    else:
-        print('This place is occupied, please try again')
+    try:
+        print_board(board)
+        row = int(input('Enter a row to place ' + signs[0] + ' (1, 2 or 3): '))
+        col = int(input('Enter a col to place ' + signs[0] + ' (1, 2 or 3): '))
+        if board[row - 1][col - 1] == ' ':
+            board[row - 1][col - 1] = signs[0]
+        else:
+            print('This place is occupied, please try again')
+            place_sign(board, signs)
+    except ValueError:
+        print('ERROR - ENTER VALID NUMBER ')
+        place_sign(board, signs)
+    except IndexError:
+        print('ERROR - ENTER VALID NUMBER ')
         place_sign(board, signs)
 
 
