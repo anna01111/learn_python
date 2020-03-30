@@ -2,11 +2,11 @@ import string
 import random
 import copy
 
-# defining a cell status
-empty = ' '
-ship_alive = '■'
-ship_killed = 'x'
-missed = '·'
+# empty ' '
+# ship_alive '■'
+# ship_killed 'x'
+# missed '·'
+# temporarily_reserved_space '/'
 
 
 def create_board(size):
@@ -46,10 +46,8 @@ def define_subsequent_units(ship_indexes, ship_size):
     a = random.choice([-1, 1])
     b = [0, a]
     random.shuffle(b)
-    print(b)
     for i in range(ship_size - 1):
         subsequent_unit_indexes = [ship_indexes[-1][0] + b[0], ship_indexes[-1][1] + b[1]]
-        print(subsequent_unit_indexes)
         ship_indexes.append(subsequent_unit_indexes)
     return ship_indexes
 
@@ -69,18 +67,35 @@ def ship_is_correctly_defined(board, ship_indexes):
 
 
 def reserve_space_around_a_ship(board, ship_indexes):
-    reserved_space_indexes = []
-
-
+    for el in ship_indexes:
+        # reserving horizontals and verticals
+        if 0 <= el[0] + 1 < len(board):
+            board[el[0] + 1][el[1]] = '/'
+        if 0 <= el[0] - 1 < len(board):
+            board[el[0] - 1][el[1]] = '/'
+        if 0 <= el[1] + 1 < len(board):
+            board[el[0]][el[1] + 1] = '/'
+        if 0 <= el[1] - 1 < len(board):
+            board[el[0]][el[1] - 1] = '/'
+        # reserving diagonals
+        if 0 <= el[0] + 1 < len(board) and 0 <= el[1] + 1 < len(board):
+            board[el[0] + 1][el[1] + 1] = '/'
+        if 0 <= el[0] - 1 < len(board) and 0 <= el[1] - 1 < len(board):
+            board[el[0] - 1][el[1] - 1] = '/'
+        if 0 <= el[0] - 1 < len(board) and 0 <= el[1] + 1 < len(board):
+            board[el[0] - 1][el[1] + 1] = '/'
+        if 0 <= el[0] + 1 < len(board) and 0 <= el[1] - 1 < len(board):
+            board[el[0] + 1][el[1] - 1] = '/'
+    return board
 
 
 def put_a_ship(board, ship_size):
     ship_indexes = define_initial_unit_of_a_ship(my_board)
     define_subsequent_units(ship_indexes, ship_size)
     if ship_is_correctly_defined(board, ship_indexes):
+        reserve_space_around_a_ship(board, ship_indexes)
         for i in range(len(ship_indexes)):
             board[ship_indexes[i][0]][ship_indexes[i][1]] = '■'
-        # reserve_space_around_a_ship(board, ship_indexes)
     else:
         put_a_ship(board, ship_size)
 
@@ -93,6 +108,16 @@ def put_ships(board):
         put_a_ship(board, 2)
     for i in range(4):
         put_a_ship(board, 1)
+    remove_reserved_space(board)
+    return board
+
+
+def remove_reserved_space(board):
+    for i in range(len(board)):
+        for j in range(len(board[i])):
+            if board[i][j] == '/':
+                board[i][j] = ' '
+    return board
 
 
 def fire_a_shot(board):
