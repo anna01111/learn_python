@@ -17,7 +17,7 @@ def create_board(size):
     return board
 
 
-def hide_ships_in_machine_board_copy(machine_board_copy):
+def hide_ships(machine_board_copy):
     for i in range(len(machine_board_copy)):
         for j in range(len(machine_board_copy[i])):
             if machine_board_copy[i][j] == '■':
@@ -25,7 +25,7 @@ def hide_ships_in_machine_board_copy(machine_board_copy):
     return machine_board_copy
 
 
-def modify_board_copy(board_copy):
+def modify_board(board_copy):
     letters = list(string.ascii_uppercase)
     letters.insert(0, ' ')
     letters = letters[:len(board_copy) + 1]
@@ -39,10 +39,10 @@ def modify_board_copy(board_copy):
     return board_copy
 
 
-def print_board_copy(user_board_copy, machine_board_copy, user_name, machine_name):
-    hide_ships_in_machine_board_copy(machine_board_copy)
-    modify_board_copy(machine_board_copy)
-    modify_board_copy(user_board_copy)
+def print_board(user_board_copy, machine_board_copy, user_name, machine_name):
+    hide_ships(machine_board_copy)
+    modify_board(machine_board_copy)
+    modify_board(user_board_copy)
     print('\n')
     print(' ' * (25 - len(user_name)) + user_name.upper() + '\'s BOARD' + ' ' * 44 + machine_name.upper() + '\'s BOARD\n')
     for i in range(len(user_board_copy)):
@@ -51,7 +51,7 @@ def print_board_copy(user_board_copy, machine_board_copy, user_name, machine_nam
     print('\n')
 
 
-def define_initial_unit_of_a_ship(board):
+def define_initial_unit_of_ship(board):
     initial_unit_indexes = [random.randint(0, len(board) - 1), random.randint(0, len(board) - 1)]
     ship_indexes = []
     ship_indexes.append(initial_unit_indexes)
@@ -68,7 +68,7 @@ def define_subsequent_units(ship_indexes, ship_size):
     return ship_indexes
 
 
-def ship_is_correctly_defined(board, ship_indexes):
+def ship_correctly_defined(board, ship_indexes):
     for i in range(len(ship_indexes)):
         if 0 <= ship_indexes[i][0] < len(board) and 0 <= ship_indexes[i][1] < len(board):
             continue
@@ -82,7 +82,7 @@ def ship_is_correctly_defined(board, ship_indexes):
     return True
 
 
-def reserve_space_around_a_ship(board, ship_indexes):
+def reserve_space_around_ship(board, ship_indexes):
     for el in ship_indexes:
         index_shift = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [-1, 1], [1, -1]]
         for i in range(len(index_shift)):
@@ -92,10 +92,10 @@ def reserve_space_around_a_ship(board, ship_indexes):
 
 
 def put_a_ship(board, ship_size):
-    ship_indexes = define_initial_unit_of_a_ship(board)
+    ship_indexes = define_initial_unit_of_ship(board)
     define_subsequent_units(ship_indexes, ship_size)
-    if ship_is_correctly_defined(board, ship_indexes):
-        reserve_space_around_a_ship(board, ship_indexes)
+    if ship_correctly_defined(board, ship_indexes):
+        reserve_space_around_ship(board, ship_indexes)
         for i in range(len(ship_indexes)):
             board[ship_indexes[i][0]][ship_indexes[i][1]] = '■'
     else:
@@ -122,26 +122,26 @@ def remove_reserved_space(board):
     return board
 
 
-def fire_a_random_shot(user_board, machine_name):
+def random_shot(user_board, machine_name):
     random_index = [random.randint(0, len(user_board) - 1), random.randint(0, len(user_board) - 1)]
     if user_board[random_index[0]][random_index[1]] == '■':
         user_board[random_index[0]][random_index[1]] = 'x'
         print('NICEEE SHOT ' + machine_name)
     elif user_board[random_index[0]][random_index[1]] == 'x':
-        fire_a_random_shot(user_board, machine_name)
+        random_shot(user_board, machine_name)
     elif user_board[random_index[0]][random_index[1]] == '.':
-        fire_a_random_shot(user_board, machine_name)
+        random_shot(user_board, machine_name)
     else:
         user_board[random_index[0]][random_index[1]] = '.'
         print('no luck for ' + machine_name)
         return user_board
 
 
-def fire_a_user_defined_shot(machine_board, user_name):
+def user_shot(machine_board, user_name):
     try:
         letters = list(string.ascii_uppercase)
         letters = letters[:len(machine_board)]
-        user_input = list(input('Now enter a cell where you want to shoot, like 1A:\n'))
+        user_input = list(input('Now enter a cell where you want to shoot, like 1A:'))
         user_index = [int(user_input[0]), letters.index(user_input[1].upper())]
         if machine_board[user_index[0]][user_index[1]] == '■':
             machine_board[user_index[0]][user_index[1]] = 'x'
@@ -156,13 +156,13 @@ def fire_a_user_defined_shot(machine_board, user_name):
             return machine_board
     except ValueError:
         print('ERROR - INCORRECT CELL IDENTIFIER')
-        fire_a_user_defined_shot(machine_board, user_name)
+        user_shot(machine_board, user_name)
     except IndexError:
         print('ERROR - INCORRECT CELL IDENTIFIER')
-        fire_a_user_defined_shot(machine_board, user_name)
+        user_shot(machine_board, user_name)
 
 
-def loose_situation_happened(board):
+def loose_situation(board):
     for el in board:
         if '■' in el:
             return False
@@ -183,24 +183,24 @@ my_machine_name = 'machine'
 my_user_board_copy = copy.deepcopy(my_user_board)
 my_machine_board_copy = copy.deepcopy(my_machine_board)
 
-print_board_copy(my_user_board_copy, my_machine_board_copy, my_user_name, my_machine_name)
+print_board(my_user_board_copy, my_machine_board_copy, my_user_name, my_machine_name)
 
 while True:
-    fire_a_user_defined_shot(my_machine_board, my_user_name)
-    fire_a_random_shot(my_user_board, my_machine_name)
+    user_shot(my_machine_board, my_user_name)
+    random_shot(my_user_board, my_machine_name)
 
     my_user_board_copy = copy.deepcopy(my_user_board)
     my_machine_board_copy = copy.deepcopy(my_machine_board)
 
-    print_board_copy(my_user_board_copy, my_machine_board_copy, my_user_name, my_machine_name)
+    print_board(my_user_board_copy, my_machine_board_copy, my_user_name, my_machine_name)
 
-    if loose_situation_happened(my_user_board) and loose_situation_happened(my_machine_board):
+    if loose_situation(my_user_board) and loose_situation(my_machine_board):
         print('it\'s a draw')
         break
-    elif loose_situation_happened(my_user_board):
+    elif loose_situation(my_user_board):
         print('VICTORY GOES TO ' + my_machine_name)
         break
-    elif loose_situation_happened(my_machine_board):
+    elif loose_situation(my_machine_board):
         print('VICTORY GOES TO ' + my_user_name)
         break
 
