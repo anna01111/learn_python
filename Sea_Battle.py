@@ -16,22 +16,37 @@ def create_board(size):
     return board
 
 
-def print_board(board):
-    board_to_print = copy.deepcopy(board)
+def hide_ships_in_machine_board_copy(machine_board_copy):
+    for i in range(len(machine_board_copy)):
+        for j in range(len(machine_board_copy[i])):
+            if machine_board_copy[i][j] == '■':
+                machine_board_copy[i][j] = ' '
+    return machine_board_copy
+
+
+def modify_board_copy(board_copy):
     letters = list(string.ascii_uppercase)
     letters.insert(0, ' ')
-    letters = letters[:len(board) + 1]
+    letters = letters[:len(board_copy) + 1]
     letters.append('')
-    numbers = [num for num in range(len(board) + 1)]
+    numbers = [num for num in range(len(board_copy) + 1)]
     numbers = list(map(str, numbers))
-    for i in range(len(board_to_print)):
-        board_to_print[i].insert(0, numbers[i])
-        board_to_print[i].append('')
-    board_to_print.insert(0, letters)
+    for i in range(len(board_copy)):
+        board_copy[i].insert(0, numbers[i])
+        board_copy[i].append('')
+    board_copy.insert(0, letters)
+    return board_copy
+
+
+def print_board_copy(user_board_copy, machine_board_copy):
+    hide_ships_in_machine_board_copy(machine_board_copy)
+    modify_board_copy(machine_board_copy)
+    modify_board_copy(user_board_copy)
     print('\n')
-    for i in range(len(board_to_print)):
-        print(' | '.join(board_to_print[i]))
-        print('__|_' * (len(board_to_print) - 1) + '__|')
+    print(' ' * 21 + 'USER BOARD' + ' ' * 48 + 'MACHINE BOARD \n')
+    for i in range(len(user_board_copy)):
+        print(' ' * 5 + ' | '.join(user_board_copy[i]) + ' ' * 15 + ' | '.join(machine_board_copy[i]))
+        print(' ' * 5 + '__|_' * (len(user_board_copy) - 1) + '__| ' + ' ' * 15 + '__|_' * (len(machine_board_copy) - 1) + '__|')
     print('\n')
 
 
@@ -90,7 +105,7 @@ def reserve_space_around_a_ship(board, ship_indexes):
 
 
 def put_a_ship(board, ship_size):
-    ship_indexes = define_initial_unit_of_a_ship(my_board)
+    ship_indexes = define_initial_unit_of_a_ship(board)
     define_subsequent_units(ship_indexes, ship_size)
     if ship_is_correctly_defined(board, ship_indexes):
         reserve_space_around_a_ship(board, ship_indexes)
@@ -128,8 +143,17 @@ def winner_check(board):
     pass
 
 
-my_board = create_board(10)
-put_ships(my_board)
-print_board(my_board)
+my_user_board = create_board(10)
+my_machine_board = create_board(10)
+
+put_ships(my_user_board)
+put_ships(my_machine_board)
+
+my_user_board_copy = copy.deepcopy(my_user_board)
+my_machine_board_copy = copy.deepcopy(my_machine_board)
+
+# while True:
+
+print_board_copy(my_user_board_copy, my_machine_board_copy)
 
 
