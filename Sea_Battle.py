@@ -17,14 +17,6 @@ def create_board(size):
     return board
 
 
-def hide_ships(machine_board_copy):
-    for i in range(len(machine_board_copy)):
-        for j in range(len(machine_board_copy[i])):
-            if machine_board_copy[i][j] == '■':
-                machine_board_copy[i][j] = ' '
-    return machine_board_copy
-
-
 def modify_board(board_copy):
     letters = list(string.ascii_uppercase)
     letters.insert(0, ' ')
@@ -120,6 +112,14 @@ def remove_reserved_space(board):
             if board[i][j] == '/':
                 board[i][j] = ' '
     return board
+
+
+def hide_ships(machine_board_copy):
+    for i in range(len(machine_board_copy)):
+        for j in range(len(machine_board_copy[i])):
+            if machine_board_copy[i][j] == '■':
+                machine_board_copy[i][j] = ' '
+    return machine_board_copy
 
 
 def random_shot(user_board, machine_name):
