@@ -2,10 +2,11 @@ import string
 import random
 import copy
 
+# Possible cell states are:
 # empty ' '
 # ship_alive '■'
 # ship_killed 'x'
-# missed '·'
+# missed '.'
 # temporarily_reserved_space '/'
 
 
@@ -38,12 +39,12 @@ def modify_board_copy(board_copy):
     return board_copy
 
 
-def print_board_copy(user_board_copy, machine_board_copy):
+def print_board_copy(user_board_copy, machine_board_copy, user_name, machine_name):
     hide_ships_in_machine_board_copy(machine_board_copy)
     modify_board_copy(machine_board_copy)
     modify_board_copy(user_board_copy)
     print('\n')
-    print(' ' * 21 + 'USER BOARD' + ' ' * 48 + 'MACHINE BOARD \n')
+    print(' ' * (25 - len(user_name)) + user_name.upper() + '\'s BOARD' + ' ' * 44 + machine_name.upper() + '\'s BOARD\n')
     for i in range(len(user_board_copy)):
         print(' ' * 5 + ' | '.join(user_board_copy[i]) + ' ' * 15 + ' | '.join(machine_board_copy[i]))
         print(' ' * 5 + '__|_' * (len(user_board_copy) - 1) + '__| ' + ' ' * 15 + '__|_' * (len(machine_board_copy) - 1) + '__|')
@@ -83,24 +84,10 @@ def ship_is_correctly_defined(board, ship_indexes):
 
 def reserve_space_around_a_ship(board, ship_indexes):
     for el in ship_indexes:
-        # reserving horizontals and verticals
-        if 0 <= el[0] + 1 < len(board):
-            board[el[0] + 1][el[1]] = '/'
-        if 0 <= el[0] - 1 < len(board):
-            board[el[0] - 1][el[1]] = '/'
-        if 0 <= el[1] + 1 < len(board):
-            board[el[0]][el[1] + 1] = '/'
-        if 0 <= el[1] - 1 < len(board):
-            board[el[0]][el[1] - 1] = '/'
-        # reserving diagonals
-        if 0 <= el[0] + 1 < len(board) and 0 <= el[1] + 1 < len(board):
-            board[el[0] + 1][el[1] + 1] = '/'
-        if 0 <= el[0] - 1 < len(board) and 0 <= el[1] - 1 < len(board):
-            board[el[0] - 1][el[1] - 1] = '/'
-        if 0 <= el[0] - 1 < len(board) and 0 <= el[1] + 1 < len(board):
-            board[el[0] - 1][el[1] + 1] = '/'
-        if 0 <= el[0] + 1 < len(board) and 0 <= el[1] - 1 < len(board):
-            board[el[0] + 1][el[1] - 1] = '/'
+        index_shift = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [-1, 1], [1, -1]]
+        for i in range(len(index_shift)):
+            if 0 <= el[0] + index_shift[i][0] < len(board) and 0 <= el[1] + index_shift[i][1] < len(board):
+                board[el[0] + index_shift[i][0]][el[1] + index_shift[i][1]] = '/'
     return board
 
 
@@ -135,12 +122,53 @@ def remove_reserved_space(board):
     return board
 
 
-def fire_a_shot(board):
-    pass
+def fire_a_random_shot(user_board, machine_name):
+    random_index = [random.randint(0, len(user_board) - 1), random.randint(0, len(user_board) - 1)]
+    if user_board[random_index[0]][random_index[1]] == '■':
+        user_board[random_index[0]][random_index[1]] = 'x'
+        print('NICEEE SHOT ' + machine_name)
+    elif user_board[random_index[0]][random_index[1]] == 'x':
+        fire_a_random_shot(user_board, machine_name)
+    elif user_board[random_index[0]][random_index[1]] == '.':
+        fire_a_random_shot(user_board, machine_name)
+    else:
+        user_board[random_index[0]][random_index[1]] = '.'
+        print('no luck for ' + machine_name)
+        return user_board
 
 
-def winner_check(board):
-    pass
+def fire_a_user_defined_shot(machine_board, user_name):
+    try:
+        letters = list(string.ascii_uppercase)
+        letters = letters[:len(machine_board)]
+        user_input = list(input('Now enter a cell where you want to shoot, like 1A:\n'))
+        user_index = [int(user_input[0]), letters.index(user_input[1].upper())]
+        if machine_board[user_index[0]][user_index[1]] == '■':
+            machine_board[user_index[0]][user_index[1]] = 'x'
+            print('NICEEE SHOT ' + user_name)
+        elif machine_board[user_index[0]][user_index[1]] == 'x':
+            print('no luck for ' + user_name)
+        elif machine_board[user_index[0]][user_index[1]] == '.':
+            print('no luck for ' + user_name)
+        else:
+            machine_board[user_index[0]][user_index[1]] = '.'
+            print('no luck for ' + user_name)
+            return machine_board
+    except ValueError:
+        print('ERROR - INCORRECT CELL IDENTIFIER')
+        fire_a_user_defined_shot(machine_board, user_name)
+    except IndexError:
+        print('ERROR - INCORRECT CELL IDENTIFIER')
+        fire_a_user_defined_shot(machine_board, user_name)
+
+
+def loose_situation_happened(board):
+    for el in board:
+        if '■' in el:
+            return False
+        else:
+            continue
+    return True
 
 
 my_user_board = create_board(10)
@@ -149,11 +177,32 @@ my_machine_board = create_board(10)
 put_ships(my_user_board)
 put_ships(my_machine_board)
 
+my_user_name = input('\nWelcome to the gameeeee ^ ^\nPlease enter your name, and we\'ll generate a board for you: ')
+my_machine_name = 'machine'
+
 my_user_board_copy = copy.deepcopy(my_user_board)
 my_machine_board_copy = copy.deepcopy(my_machine_board)
 
-# while True:
+print_board_copy(my_user_board_copy, my_machine_board_copy, my_user_name, my_machine_name)
 
-print_board_copy(my_user_board_copy, my_machine_board_copy)
+while True:
+    fire_a_user_defined_shot(my_machine_board, my_user_name)
+    fire_a_random_shot(my_user_board, my_machine_name)
 
+    my_user_board_copy = copy.deepcopy(my_user_board)
+    my_machine_board_copy = copy.deepcopy(my_machine_board)
+
+    print_board_copy(my_user_board_copy, my_machine_board_copy, my_user_name, my_machine_name)
+
+    if loose_situation_happened(my_user_board) and loose_situation_happened(my_machine_board):
+        print('it\'s a draw')
+        break
+    elif loose_situation_happened(my_user_board):
+        print('VICTORY GOES TO ' + my_machine_name)
+        break
+    elif loose_situation_happened(my_machine_board):
+        print('VICTORY GOES TO ' + my_user_name)
+        break
+
+print('\nend of the game')
 
