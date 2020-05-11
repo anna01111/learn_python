@@ -16,7 +16,7 @@ while x == 'y':
         print("Good afternoon")
     elif 19 <= t < 24:
         print("Good eve")
-    x = input('Do you want to continue? y/n: ')
+    x = input('Do you want to continue? y/n_raw: ')
     """
 
 """student_marks = input('Please enter your marks separated by space: ').split(' ')
