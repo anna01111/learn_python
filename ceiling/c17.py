@@ -1,6 +1,7 @@
 # Стековый калькулятор
 
-input_s = '123*+4-'
+# input_s = '123*+4-'
+input_s = [10, 2, 3, '-', '+', 4, '*']
 res = 0
 stack_s = []
 
@@ -30,14 +31,14 @@ signs = {
 
 for i in range(len(input_s)):
 
-    print('input ' + input_s)
+    print('input ', input_s)
     print(stack_s)
     print()
-    if '0' <= input_s[i] <= '9':
+    if type(input_s[i]) == int:
         stack_s.append(input_s[i])
     if input_s[i] in signs:
-        op2 = int(stack_s.pop())
-        op1 = int(stack_s.pop())
+        op2 = stack_s.pop()
+        op1 = stack_s.pop()
         if input_s[i] == '+':
             res = addition(op1, op2)
         elif input_s[i] == '-':
@@ -48,7 +49,7 @@ for i in range(len(input_s)):
             res = division(op1, op2)
         stack_s.append(res)
 
-print('input ' + input_s)
+print('input ', input_s)
 print('res ', res)
 print(stack_s)
 print()
