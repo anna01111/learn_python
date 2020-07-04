@@ -27,13 +27,14 @@ def format_string(s, length):
             break
     lst.append(s[st:len(s) - 1])
 
-    for el in lst:
-        print(el)
+    # for el in lst:
+    #     print(el)
     return lst
 
 
 def stretchen(lst, length):
 
+    # розтягуємо текст
     lst2 = []
     for el in lst:
         space = length - len(el)
@@ -65,6 +66,7 @@ def stretchen(lst, length):
 
 def put_right(lst, length):
 
+    # прижимаєм текст до правого краю
     lst2 = []
     for el in lst:
         space = length - len(el)
@@ -83,7 +85,7 @@ def put_right(lst, length):
 
 
 def put_center(lst, length):
-
+    # - центруємо текст
     lst2 = []
     for el in lst:
         space = length - len(el)
@@ -102,3 +104,60 @@ def put_center(lst, length):
 # for el in my_lst2:
 #     print(el)
 
+
+text = ''
+while True:
+    filename = input('Please enter name of your file: ')
+    print('\n')
+    try:
+        f = open(filename, 'r')
+        text = f.read()
+        f.close()
+        break
+    except FileNotFoundError:
+        print('File not found')
+
+text_formatted = format_string(text, my_length)
+for el in text_formatted:
+    print(el)
+
+
+command = None
+save_as = ''
+res = []
+while command != 'q':
+    print('\n')
+    command = input(
+        'Enter "s" to stretchen text, "r" to put text right, "c" to put text center, "l" to put text left, "q" to quit'
+    )
+    if command == "s":
+        res = stretchen(text_formatted, my_length)
+        for el in res:
+            print(el)
+    elif command == "r":
+        res = put_right(text_formatted, my_length)
+        for el in res:
+            print(el)
+    elif command == "c":
+        res = put_center(text_formatted, my_length)
+        for el in res:
+            print(el)
+    elif command == "l":
+        res = text_formatted
+        for el in res:
+            print(el)
+
+
+x = input('If you want to save changes to a new file, enter "y". If not - enter "n": ')
+if x == 'y':
+    save_as = input('Please enter name of the new file: ')
+
+    #  saving to a new file
+    f2 = open(save_as, 'w')
+    for el in res:
+        f2.write(el)
+        f2.write('\n')
+    f2.close()
+    print('File {} saved. \n'.format(save_as))
+
+print('The end')
