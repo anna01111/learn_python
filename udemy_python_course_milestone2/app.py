@@ -1,4 +1,4 @@
-from utils.database import *
+from utils.database_sqlite import *
 
 USER_CHOICE = """
 Enter:
@@ -22,6 +22,7 @@ operations = {
 def menu():
     operation = input(USER_CHOICE)
     while operation != 'q':
+
         try:
             operations[operation]()
         except KeyError:
