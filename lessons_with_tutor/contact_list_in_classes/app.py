@@ -6,7 +6,7 @@ USER_INPUT = """\nPlease enter\n
 - 's' to sort,
 - 'r' to remove,
 - 'e' to edit,
-- 'q' to exit\n
+- 'q' to exit_\n
 """
 
 

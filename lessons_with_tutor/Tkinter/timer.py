@@ -12,7 +12,7 @@ def bye():
 
 
 while 1:
-    timer = Timer(1, hello)
+    timer = Timer(300, hello)
     timer.start()
     bye()
 

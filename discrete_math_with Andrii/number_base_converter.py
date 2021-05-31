@@ -15,3 +15,6 @@ while num_to_convert > 1:
 result_num.append(characters_set[num_to_convert])
 result_num = result_num[::-1]
 print(result_num)
+
+print(string.digits)
+print(string.ascii_uppercase)

@@ -11,12 +11,14 @@ def update_clock1():
         sec -= 1
         if sec >= 0:
             root.after(1000, update_clock1)
+        else:
+            pause_button["state"] = "disabled"
 
 
 def show_message():
     global sec
     sec = int(message.get())
-
+    pause_button["state"] = "normal"
     update_clock1()
 
 
@@ -31,7 +33,10 @@ def pause_timer():
     #     pause = True
     pause = False if pause else True
     if not pause:
+        pause_button["text"] = "pause"
         update_clock1()
+    else:
+        pause_button["text"] = "resume"
 
 
 root = Tk()
@@ -47,11 +52,11 @@ message = StringVar()
 message_entry = Entry(textvariable=message)
 message_entry.place(relx=.5, rely=.1, anchor="c")
 
-message_button = Button(text="Click Me", command=show_message)
+message_button = Button(text="start", command=show_message)
 message_button.place(relx=.5, rely=.5, anchor="c")
 
 
-pause_button = Button(text="Pause", command=pause_timer)
+pause_button = Button(text="pause", command=pause_timer)
 pause_button.place(relx=.5, rely=.8, anchor="c")
 
 

@@ -62,8 +62,8 @@ while True:
         print("user2 is a winner.")
     elif user1 == 3 and user2 == 2 or user1 == 2 and user2 == 3:
         print("user1 is a winner.")
-    command = input("Enter exit to leave or anything else to continue: ")
-    if command == "exit":
+    command = input("Enter exit_ to leave or anything else to continue: ")
+    if command == "exit_":
         break
 """
 
