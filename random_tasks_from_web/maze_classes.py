@@ -17,20 +17,20 @@ class MazeRunner(object):
     def __init__(self, maze, start, finish):
         self.__maze = maze
         self.__rotation = (1, 0)
-        self.__x = start[0]
-        self.__y = start[1]
+        self.x = start[0]
+        self.y = start[1]
         self.__finish = finish
 
     def go(self):
-        x = self.__x + self.__rotation[0]
-        y = self.__y + self.__rotation[1]
+        x = self.x + self.__rotation[0]
+        y = self.y + self.__rotation[1]
         if x > len(self.__maze) - 1 \
                 or y > len(self.__maze) - 1 \
                 or x < 0 or y < 0 \
                 or self.__maze[x][y] == 1:
             return False
-        self.__x = x
-        self.__y = y
+        self.x = x
+        self.y = y
         # print_maze(self.__maze, self.__x, self.__y)
         return True
 
@@ -55,4 +55,5 @@ class MazeRunner(object):
         return self
 
     def found(self):
-        return self.__x == self.__finish[0] and self.__y == self.__finish[1]
+        return self.x == self.__finish[0] and self.y == self.__finish[1]
+
