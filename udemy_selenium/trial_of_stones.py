@@ -1,7 +1,9 @@
 from selenium import webdriver
 
 """
-https://selenium-python.readthedocs.io/locating-elements.html
+https://selenium-python.readthedocs.io/
+
+https://www.selenium.dev/selenium/docs/api/py/api.html
 """
 
 

@@ -1,5 +1,5 @@
 from selenium import webdriver
-import time
+
 
 """
 https://selenium-python.readthedocs.io/locating-elements.html
